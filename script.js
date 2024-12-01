@@ -203,11 +203,10 @@ document.getElementById("buscarConsulta").addEventListener("click", async () => 
   }
   
 
-  // Carrega as consultas ao iniciar a página
-  document.addEventListener("DOMContentLoaded", listarConsultas);
 
 // Lista de médicos da página "Médicos"
 document.addEventListener("DOMContentLoaded", () => {
+    // Lista de médicos
     const medicos = [
         "Dr. Diogo Sossai Pires",
         "Dra. Angelina Ernesto D. Souza",
@@ -215,26 +214,28 @@ document.addEventListener("DOMContentLoaded", () => {
         "Dr. Gabriel Pereira Dantas"
     ];
 
-    // Salva a lista de médicos no localStorage
-    localStorage.setItem("medicos", JSON.stringify(medicos));
-});
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
-    const selectNomeD = document.getElementById("selectNomeD");
+    // Salva a lista de médicos no localStorage, se ainda não estiver salva
+    if (!localStorage.getItem("medicos")) {
+        localStorage.setItem("medicos", JSON.stringify(medicos));
+    }
 
     // Carrega a lista de médicos do localStorage
-    const medicos = JSON.parse(localStorage.getItem("medicos")) || [];
+    const storedMedicos = JSON.parse(localStorage.getItem("medicos")) || [];
 
-    // Adiciona cada médico como uma opção no dropdown
-    medicos.forEach((medico) => {
-        const option = document.createElement("option");
-        option.value = medico;
-        option.textContent = medico;
-        selectNomeD.appendChild(option);
-    });
+    // Preenche o dropdown com os médicos
+    const selectNomeD = document.getElementById("selectNomeD"); // Certifique-se de que o ID está correto no HTML
+    if (selectNomeD) {
+        storedMedicos.forEach((medico) => {
+            const option = document.createElement("option");
+            option.value = medico;
+            option.textContent = medico;
+            selectNomeD.appendChild(option);
+        });
+    } else {
+        console.error("Elemento com ID 'selectNomeD' não encontrado.");
+    }
 });
+
 
 document.querySelector("form").addEventListener("submit", function (event) {
     event.preventDefault(); // Impede o envio padrão para processar manualmente
